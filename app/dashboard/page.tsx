@@ -4,6 +4,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { CarroCard } from "./carrocard";
 import { FiltroEstatus } from "./filtroestatus";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tablero",
+};
 
 export default async function DashboardPage({
   searchParams,

@@ -2,6 +2,11 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { EditarPerfil } from "./editarperfil";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Perfil",
+};
 
 const COLORES_BENEFICIARIO: Record<string, string> = {
   jorge: "#7c2855",

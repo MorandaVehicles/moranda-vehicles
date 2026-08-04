@@ -8,6 +8,27 @@ import { CampoEditable } from "./campoeditable";
 import { Chatbot } from "./chatbot";
 import { BotonIcv } from "./botonicv";
 import { ItemsRecon } from "./itemsrecon";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const supabase = await createClient();
+
+  const { data: carro } = await supabase
+    .from("carros")
+    .select("marca, modelo, anio")
+    .eq("id", id)
+    .single();
+
+  const titulo = carro
+    ? `${carro.marca ?? ""} ${carro.modelo ?? ""} ${carro.anio ?? ""}`.trim()
+    : "Carro";
+
+  return { title: titulo || "Carro" };
+}
 import { FormGasto } from "./formgasto";
 import { BotonBorrar } from "./botonborrar";
 

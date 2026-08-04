@@ -2,6 +2,11 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { SelectorMes } from "./selectormes";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Ganancias",
+};
 
 const BENEFICIARIOS = ["jorge", "rolando", "empresa"] as const;
 
