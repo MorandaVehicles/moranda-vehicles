@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 
 const LINKS = [
   { href: "/dashboard", label: "Tablero" },
+  { href: "/dashboard/balance", label: "Balance" },
   { href: "/dashboard/ganancias", label: "Ganancias" },
 ];
 
