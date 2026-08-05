@@ -19,6 +19,20 @@ const supabase = createClient(
 const GROQ_API_KEY = process.env.GROQ_API_KEY!;
 const GROQ_MODEL = "llama-3.3-70b-versatile"; // rápido y gratis dentro del límite de Groq
 
+// cabeceras CORS: necesarias porque la extensión llama a este endpoint desde
+// otro origen (chrome-extension://... o moz-extension://...), y el navegador
+// bloquea esas peticiones por default a menos que el servidor las autorice
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+// el navegador manda esta petición "de prueba" (preflight) antes del POST real
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 interface ImportPayload {
   url_marketplace: string;
   descripcion_original: string;
@@ -46,7 +60,7 @@ export async function POST(req: NextRequest) {
     if (!body.url_marketplace || !body.descripcion_original) {
       return NextResponse.json(
         { error: "Faltan url_marketplace o descripcion_original" },
-        { status: 400 }
+        { status: 400, headers: CORS_HEADERS }
       );
     }
 
@@ -80,12 +94,15 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error;
 
-    return NextResponse.json({ id: data.id, parsed: datosParsed }, { status: 201 });
+    return NextResponse.json(
+      { id: data.id, parsed: datosParsed },
+      { status: 201, headers: CORS_HEADERS }
+    );
   } catch (err) {
     console.error("Error en /api/carros/import:", err);
     return NextResponse.json(
       { error: "No se pudo importar el carro" },
-      { status: 500 }
+      { status: 500, headers: CORS_HEADERS }
     );
   }
 }
